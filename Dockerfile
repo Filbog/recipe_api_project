@@ -16,12 +16,16 @@ ARG DEV=false
 RUN python -m venv /py && \
     #this installs our requirements in the venv
     /py/bin/pip install --upgrade pip && \
+    apk add --update --no-cache postgresql-client && \
+    apk add --update --no-cache --virtual .tmp-build-deps \
+        build-base postgresql-dev musl-dev && \
     /py/bin/pip install -r /tmp/requirements.txt && \
     if [ "$DEV" = "true" ]; \
         then /py/bin/pip install -r /tmp/requirements.dev.txt; \
     fi && \
     #we don't need tmp folder anymore, so we delete it to keep the docker img as lightweight as possible as possible
     rm -rf /tmp && \
+    apk del .tmp-build-deps && \
     #security best practice to create a new user, not use root user
     adduser \
         --disabled-password \
