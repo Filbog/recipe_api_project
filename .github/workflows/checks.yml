@@ -1,18 +1,27 @@
 #our cfg for github actions
+
+# three dashes indicate that it's a .yml file
 ---
+# this is the name that's going to appear in GH actions
 name: Checks
+# here we specify the trigger
 on: [push]
 
 jobs:
+  # this is an arbitrary id we can reference later in other cfgs, files etc
   test-lint:
     name: Test and Lint
+    # we can choose different "runners" - systems where our actions run
     runs-on: ubuntu-latest
+    # steps - different things that run during our "job"
     steps:
       - name: Login to Docker Hub
+        # we're using the pre-made "actions" to log in into Docker Hub
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      # another pre-made action. This "checks out" (accesses) our code. This is neccessary bc by default, GH Actions doesn't check out our code. There are jobs/actions that don't neccessarily interact with our code.
       - name: Checkout
         uses: actions/checkout@v2
         #this runs unit tests on our project
