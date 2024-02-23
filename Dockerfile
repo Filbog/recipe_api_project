@@ -16,6 +16,7 @@ ARG DEV=false
 RUN python -m venv /py && \
     #this installs our requirements in the venv
     /py/bin/pip install --upgrade pip && \
+    # installing dependencies for psycopg2
     apk add --update --no-cache postgresql-client && \
     apk add --update --no-cache --virtual .tmp-build-deps \
         build-base postgresql-dev musl-dev && \
@@ -25,6 +26,7 @@ RUN python -m venv /py && \
     fi && \
     #we don't need tmp folder anymore, so we delete it to keep the docker img as lightweight as possible as possible
     rm -rf /tmp && \
+    #this line deletes packages neccessary only for installing psycopg2, not running it. So we don't need them after psycopg2 is installed
     apk del .tmp-build-deps && \
     #security best practice to create a new user, not use root user
     adduser \

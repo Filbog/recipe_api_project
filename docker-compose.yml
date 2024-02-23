@@ -15,7 +15,9 @@ services:
       - ./app:/app
     #this is the command that will be run when the container is started
     command: >
-      sh -c "python manage.py runserver 0.0.0.0:8000"
+      sh -c "python manage.py wait_for_db &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
     environment:
       - DB_HOST=db
       - DB_NAME=devdb
@@ -27,12 +29,15 @@ services:
   db:
     image: postgres:13-alpine
     volumes:
+      # should match the name of our volume
       - dev-db-data:/var/lib/postgresql/data
-      #for our local development server.
+    #for our local development server only.
     environment:
+      # here we set three environment variables for local dev database. They're super generic bc we're only going to use it locally
       - POSTGRES_DB=devdb
       - POSTGRES_USER=devuser
       - POSTGRES_PASSWORD=changeme
 
 volumes:
+  # name of our volume
   dev-db-data:

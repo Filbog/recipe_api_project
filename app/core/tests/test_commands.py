@@ -15,16 +15,17 @@ from django.test import SimpleTestCase
 class CommandTests(SimpleTestCase):
     def test_wait_for_db_ready(self, patched_check):
         """Test waiting for db if the db is ready"""
-        patched_check.return_value = True
 
+        patched_check.return_value = True
         call_command("wait_for_db")
 
         patched_check.assert_called_once_with(databases=["default"])
 
     @patch("time.sleep")
     # patched_sleep is from the decorator right above, patched_check from the one above class
+    # order of args is important. Django picks args inside-out 
     def test_wait_for_db_delay(self, patched_sleep, patched_check):
-        """test waiting for db when getting OperatinalError"""
+        """test waiting for db when getting OperationalError"""
         # first 2 times we raise psycopg2 error, then 3 times OperationalError, then True
         patched_check.side_effect = (
             [Psycopg2Error] * 2 + [OperationalError] * 3 + [True]

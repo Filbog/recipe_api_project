@@ -46,3 +46,6 @@ class UserAdmin(BaseUserAdmin):
 
 # we need the second argument to use our custom UserAdmin, otherwise it uses the default one
 admin.site.register(models.User, UserAdmin)
+admin.site.register(models.Recipe)
+admin.site.register(models.Tag)
+admin.site.register(models.Ingredient)

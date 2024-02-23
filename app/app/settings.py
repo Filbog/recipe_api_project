@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     # my apps
     "core",
     "user",
+    "recipe",
     # 3rd party
     "rest_framework",
     "drf_spectacular",
@@ -83,6 +84,7 @@ WSGI_APPLICATION = "app.wsgi.application"
 
 DATABASES = {
     "default": {
+        # DB_HOST etc reference those in docker-compose.yml
         "ENGINE": "django.db.backends.postgresql",
         "HOST": os.environ.get("DB_HOST"),
         "NAME": os.environ.get("DB_NAME"),
