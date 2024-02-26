@@ -1,3 +1,6 @@
+# used to "mock" - replace behaviors for the purpose of testing
+from unittest.mock import patch
+
 # this will be used to store one of the values in our recipe object
 from decimal import Decimal
 
@@ -80,3 +83,18 @@ class ModelTests(TestCase):
         ingredient = models.Ingredient.objects.create(user=user, name="Ingredient1")
 
         self.assertEqual(str(ingredient), ingredient.name)
+
+    # this uuid is unique identifier - so that every file has a unique name
+    # we're patching the uuid functionality. It generates random filename which is awesome, but for
+    # the tests - we want a simple name to be able to identify it easily
+    @patch("core.models.uuid.uuid4")
+    def test_recipe_file_name_uuid(self, mock_uuid):
+        """Test generating path to an image in the system"""
+        # here we're replacing the result of uuid with our value
+        uuid = "test-uuid"
+        mock_uuid.return_value = uuid
+        # creating a filepath to our new image named example.com
+        file_path = models.recipe_image_file_path(None, "example.jpg")
+
+        # checking if the image was saved in the path we've predicted and wanted
+        self.assertEqual(file_path, f"uploads/recipe/{uuid}.jpg")

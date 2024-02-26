@@ -13,6 +13,8 @@ services:
     volumes:
       #we're mapping the local 'app' directory to the app directory in the container
       - ./app:/app
+      # setting up a volume directory
+      - dev-static-data:/vol/web
     #this is the command that will be run when the container is started
     command: >
       sh -c "python manage.py wait_for_db &&
@@ -39,5 +41,7 @@ services:
       - POSTGRES_PASSWORD=changeme
 
 volumes:
-  # name of our volume
+  # name of our volume for the db
   dev-db-data:
+  # volume for static files
+  dev-static-data:
