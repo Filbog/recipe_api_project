@@ -148,3 +148,8 @@ AUTH_USER_MODEL = "core.User"
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
+
+# this is necessary for being able to upload images via the browser API interface
+SPECTACULAR_SETTINGS = {
+    "COMPONENT_SPLIT_REQUEST": True,
+}
